@@ -151,7 +151,7 @@
      <string>Result:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtCalculation">
+   <widget class="QLineEdit" name="txtExpression">
     <property name="geometry">
      <rect>
       <x>240</x>
@@ -161,7 +161,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtFirstNum_3">
+   <widget class="QLineEdit" name="txtAns">
     <property name="geometry">
      <rect>
       <x>360</x>
