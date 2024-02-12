@@ -15,47 +15,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-double firstNum, secondNum, result;
-
-void MainWindow::on_additionButton_clicked()
-{
-    firstNum = ui->txtFirstNum->text().toInt();
-    secondNum = ui->txtSecondNum->text().toInt();
-    result = firstNum + secondNum;
-    ui->txtResult->setText(QString::number(result));
-}
-
-void MainWindow::on_subtractionButton_clicked()
-{
-    firstNum = ui->txtFirstNum->text().toInt();
-    secondNum = ui->txtSecondNum->text().toInt();
-    result = firstNum - secondNum;
-    ui->txtResult->setText(QString::number(result));
-}
-
-void MainWindow::on_multiplicationButton_clicked()
-{
-    firstNum = ui->txtFirstNum->text().toInt();
-    secondNum = ui->txtSecondNum->text().toInt();
-    result = firstNum * secondNum;
-    ui->txtResult->setText(QString::number(result));
-}
-
-void MainWindow::on_divisionButton_clicked()
-{
-    secondNum = ui->txtSecondNum->text().toDouble();
-
-    if (secondNum!=0){
-        firstNum = ui->txtFirstNum->text().toDouble();
-        result = firstNum / secondNum;
-        ui->txtResult->setText(QString::number(result));
-    }
-    else {
-        ui->txtResult->setText(QString("Error: Trying to divide by 0"));
-    }
-}
-
-
 QString expression;
 
 void MainWindow::on_zeroButton_clicked()
@@ -124,25 +83,25 @@ void MainWindow::on_pointButton_clicked()
     ui->txtExpression->setText(expression);
 }
 
-void MainWindow::on_additionButton_2_clicked()
+void MainWindow::on_additionButton_clicked()
 {
     expression.append("+");
     ui->txtExpression->setText(expression);
 }
 
-void MainWindow::on_subtractionButton_2_clicked()
+void MainWindow::on_subtractionButton_clicked()
 {
     expression.append("-");
     ui->txtExpression->setText(expression);
 }
 
-void MainWindow::on_multiplicationButton_2_clicked()
+void MainWindow::on_multiplicationButton_clicked()
 {
     expression.append("*");
     ui->txtExpression->setText(expression);
 }
 
-void MainWindow::on_divisionButton_2_clicked()
+void MainWindow::on_divisionButton_clicked()
 {
     expression.append("/");
     ui->txtExpression->setText(expression);
@@ -154,47 +113,78 @@ void MainWindow::on_deleteButton_clicked()
     ui->txtExpression->setText(expression);
 }
 
+void MainWindow::on_pushButton_clicked()
+{
+    expression.clear();
+    ui->txtExpression->setText(expression);
+}
 
 void MainWindow::on_equalsButton_clicked()
 {
+    if (expression.isEmpty()){
+        return;
+    }
     string expression_string = expression.toStdString();
     char c;
-    bool all_division_complete = false;
-    bool all_multiplication_complete = false;
-    bool all_addition_complete = false;
-    bool all_subtraction_complete = false;
+    bool all_mult_and_div_complete = false;
+    bool all_add_and_sub_complete = false;
 
-    while (!all_division_complete){
+    while (!all_mult_and_div_complete){
         int expression_length = expression_string.length();
         int previous_operator_position = -1;
-        int division_position;
+        int div_or_mult_position;
         int next_operator_position = expression_length;
-        bool division_found = false;
+        bool div_found = false;
+        bool mult_found = false;
 
         for(int i=0; i < expression_length; i++) {
             c = expression_string.at(i);
-            if ((c == '*' || c == '-' || c == '+' ) && !division_found) {
+            if ((c == '-' || c == '+') && !div_found && !mult_found) {
+                if (i == 0 || i == expression_length-1) {
+                    ui->txtAns->setText(QString("Invalid Operator Position: %1").arg(c));
+                    return;
+                }
                 previous_operator_position = i;
             }
-            else if ((c == '/') && !division_found){
-                division_found = true;
-                division_position = i;
+            else if (c == '/' && !div_found && !mult_found){
+                if (i == 0 || i == expression_length-1) {
+                    ui->txtAns->setText(QString("Invalid Operator Position: %1").arg(c));
+                    return;
+                }
+                div_found = true;
+                div_or_mult_position = i;
             }
-            else if ((c == '/' || c == '*' || c == '-' || c == '+' ) && division_found){
+            else if (c == '*' && !div_found && !mult_found){
+                if (i == 0 || i == expression_length-1) {
+                    ui->txtAns->setText(QString("Invalid Operator Position: %1").arg(c));
+                    return;
+                }
+                mult_found = true;
+                div_or_mult_position = i;
+            }
+            else if ((c == '/' || c == '*' || c == '-' || c == '+' ) && (div_found || mult_found)){
+                if (i == expression_length-1) {
+                    ui->txtAns->setText(QString("Invalid Operator Position: %1").arg(c));
+                    return;
+                }
                 next_operator_position = i;
                 break;
             }
-            else if ((i == expression_length - 1) && !division_found){
-                all_division_complete = true;
+            else if ((i == expression_length - 1) && !div_found && !mult_found){
+                all_mult_and_div_complete = true;
             }
         }
-        if (division_found && !all_division_complete){
+        if (div_found && !all_mult_and_div_complete){
             string first_number_string;
             string second_number_string;
-            for(int i = previous_operator_position + 1; i < division_position; i++){
+            if (div_or_mult_position - previous_operator_position == 1 || next_operator_position - div_or_mult_position == 1) {
+                ui->txtAns->setText(QString("Error: Two or more consecutive operators!"));
+                return;
+            }
+            for(int i = previous_operator_position + 1; i < div_or_mult_position; i++){
                 first_number_string += expression_string.at(i);
             }
-            for(int i = division_position + 1; i < next_operator_position; i++){
+            for(int i = div_or_mult_position + 1; i < next_operator_position; i++){
                 second_number_string += expression_string.at(i);
             }
             string result = to_string(stod(first_number_string) / stod(second_number_string));
@@ -203,39 +193,17 @@ void MainWindow::on_equalsButton_clicked()
             expression_string.erase(previous_operator_position + 1, next_operator_position-previous_operator_position - 1);
             expression_string.insert(previous_operator_position + 1, result);
         }
-    }
-
-    while (!all_multiplication_complete){
-        int expression_length = expression_string.length();
-        int previous_operator_position = -1;
-        int multiplication_position;
-        int next_operator_position = expression_length;
-        bool multiplication_found = false;
-
-        for(int i=0; i < expression_length; i++) {
-            c = expression_string.at(i);
-            if ((c == '-' || c == '+' ) && !multiplication_found) {
-                previous_operator_position = i;
-            }
-            else if ((c == '*') && !multiplication_found){
-                multiplication_found = true;
-                multiplication_position = i;
-            }
-            else if ((c == '*' || c == '-' || c == '+' ) && multiplication_found){
-                next_operator_position = i;
-                break;
-            }
-            else if ((i == expression_length - 1) && !multiplication_found){
-                all_multiplication_complete = true;
-            }
-        }
-        if (multiplication_found && !all_multiplication_complete){
+        else if (mult_found && !all_mult_and_div_complete){
             string first_number_string;
             string second_number_string;
-            for(int i = previous_operator_position + 1; i < multiplication_position; i++){
+            if (div_or_mult_position - previous_operator_position == 1 || next_operator_position - div_or_mult_position == 1) {
+                ui->txtAns->setText(QString("Error: Two or more consecutive operators!"));
+                return;
+            }
+            for(int i = previous_operator_position + 1; i < div_or_mult_position; i++){
                 first_number_string += expression_string.at(i);
             }
-            for(int i = multiplication_position + 1; i < next_operator_position; i++){
+            for(int i = div_or_mult_position + 1; i < next_operator_position; i++){
                 second_number_string += expression_string.at(i);
             }
             string result = to_string(stod(first_number_string) * stod(second_number_string));
@@ -246,37 +214,43 @@ void MainWindow::on_equalsButton_clicked()
         }
     }
 
-    while (!all_addition_complete){
+    while (!all_add_and_sub_complete){
         int expression_length = expression_string.length();
         int previous_operator_position = -1;
-        int addition_position;
+        int add_or_sub_position;
         int next_operator_position = expression_length;
-        bool addition_found = false;
+        bool add_found = false;
+        bool sub_found = false;
 
         for(int i=0; i < expression_length; i++) {
             c = expression_string.at(i);
-            if ((c == '-') && !addition_found) {
-                previous_operator_position = i;
+            if ((c == '+') && !add_found && !sub_found){
+                add_found = true;
+                add_or_sub_position = i;
             }
-            else if ((c == '+') && !addition_found){
-                addition_found = true;
-                addition_position = i;
+            else if ((c == '-') && !sub_found && !add_found){
+                sub_found = true;
+                add_or_sub_position = i;
             }
-            else if ((c == '-' || c == '+' ) && addition_found){
+            else if ((c == '-' || c == '+' ) && (add_found || sub_found)){
                 next_operator_position = i;
                 break;
             }
-            else if ((i == expression_length - 1) && !addition_found){
-                all_addition_complete = true;
+            else if ((i == expression_length - 1) && !add_found && !sub_found){
+                all_add_and_sub_complete = true;
             }
         }
-        if (addition_found && !all_addition_complete){
+        if (add_found && !all_add_and_sub_complete){
             string first_number_string;
             string second_number_string;
-            for(int i = previous_operator_position + 1; i < addition_position; i++){
+            if (add_or_sub_position - previous_operator_position == 1 || next_operator_position - add_or_sub_position == 1) {
+                ui->txtAns->setText(QString("Error: Two or more consecutive operators!"));
+                return;
+            }
+            for(int i = previous_operator_position + 1; i < add_or_sub_position; i++){
                 first_number_string += expression_string.at(i);
             }
-            for(int i = addition_position + 1; i < next_operator_position; i++){
+            for(int i = add_or_sub_position + 1; i < next_operator_position; i++){
                 second_number_string += expression_string.at(i);
             }
             string result = to_string(stod(first_number_string) + stod(second_number_string));
@@ -285,36 +259,18 @@ void MainWindow::on_equalsButton_clicked()
             expression_string.erase(previous_operator_position + 1, next_operator_position-previous_operator_position - 1);
             expression_string.insert(previous_operator_position + 1, result);
         }
-    }
 
-    while (!all_subtraction_complete){
-        int expression_length = expression_string.length();
-        int previous_operator_position = -1;
-        int subtraction_position;
-        int next_operator_position = expression_length;
-        bool subtraction_found = false;
-
-        for(int i=0; i < expression_length; i++) {
-            c = expression_string.at(i);
-            if ((c == '-') && !subtraction_found){
-                subtraction_found = true;
-                subtraction_position = i;
-            }
-            else if ((c == '-') && subtraction_found){
-                next_operator_position = i;
-                break;
-            }
-            else if ((i == expression_length - 1) && !subtraction_found){
-                all_subtraction_complete = true;
-            }
-        }
-        if (subtraction_found && !all_subtraction_complete){
+        else if (sub_found && !all_add_and_sub_complete){
             string first_number_string;
             string second_number_string;
-            for(int i = previous_operator_position + 1; i < subtraction_position; i++){
+            if (add_or_sub_position - previous_operator_position == 1 || next_operator_position - add_or_sub_position == 1) {
+                ui->txtAns->setText(QString("Error: Two or more consecutive operators!"));
+                return;
+            }
+            for(int i = previous_operator_position + 1; i < add_or_sub_position; i++){
                 first_number_string += expression_string.at(i);
             }
-            for(int i = subtraction_position + 1; i < next_operator_position; i++){
+            for(int i = add_or_sub_position + 1; i < next_operator_position; i++){
                 second_number_string += expression_string.at(i);
             }
             string result = to_string(stod(first_number_string) - stod(second_number_string));
@@ -324,6 +280,10 @@ void MainWindow::on_equalsButton_clicked()
             expression_string.insert(previous_operator_position + 1, result);
         }
     }
+
     ui->txtAns->setText(QString::fromStdString(expression_string));
 }
+
+
+
 

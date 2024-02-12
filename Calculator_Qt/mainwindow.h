@@ -18,14 +18,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_additionButton_clicked();
-
-    void on_subtractionButton_clicked();
-
-    void on_multiplicationButton_clicked();
-
-    void on_divisionButton_clicked();
-
     void on_oneButton_clicked();
 
     void on_zeroButton_clicked();
@@ -48,17 +40,19 @@ private slots:
 
     void on_pointButton_clicked();
 
-    void on_additionButton_2_clicked();
+    void on_additionButton_clicked();
 
-    void on_subtractionButton_2_clicked();
+    void on_subtractionButton_clicked();
 
-    void on_multiplicationButton_2_clicked();
+    void on_multiplicationButton_clicked();
 
-    void on_divisionButton_2_clicked();
+    void on_divisionButton_clicked();
 
     void on_deleteButton_clicked();
 
     void on_equalsButton_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
