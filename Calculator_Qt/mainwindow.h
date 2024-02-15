@@ -54,6 +54,10 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_txtExpression_textChanged(const QString &arg1);
+
+    void on_txtExpression_returnPressed();
+
 private:
     Ui::MainWindow *ui;
 };

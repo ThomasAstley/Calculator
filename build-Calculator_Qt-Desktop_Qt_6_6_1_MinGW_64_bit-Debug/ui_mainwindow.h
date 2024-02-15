@@ -89,6 +89,7 @@ public:
 
         txtAns = new QLineEdit(centralwidget);
         txtAns->setObjectName("txtAns");
+        txtAns->setReadOnly(true);
 
         gridLayout->addWidget(txtAns, 1, 1, 1, 5);
 
