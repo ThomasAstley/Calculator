@@ -52,11 +52,16 @@ private slots:
 
     void on_equalsButton_clicked();
 
-    void on_pushButton_clicked();
+    void on_clearButton_clicked();
 
     void on_txtExpression_textChanged(const QString &arg1);
 
     void on_txtExpression_returnPressed();
+
+
+    void on_leftBracketButton_clicked();
+
+    void on_rightBracketButton_clicked();
 
 private:
     Ui::MainWindow *ui;
