@@ -18,35 +18,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_oneButton_clicked();
-
-    void on_zeroButton_clicked();
-
-    void on_twoButton_clicked();
-
-    void on_threeButton_clicked();
-
-    void on_fourButton_clicked();
-
-    void on_fiveButton_clicked();
-
-    void on_sixButton_clicked();
-
-    void on_sevenButton_clicked();
-
-    void on_eightButton_clicked();
-
-    void on_nineButton_clicked();
-
-    void on_pointButton_clicked();
-
-    void on_additionButton_clicked();
-
-    void on_subtractionButton_clicked();
-
-    void on_multiplicationButton_clicked();
-
-    void on_divisionButton_clicked();
+    void onNumberOrSymbolButtonClicked();
 
     void on_deleteButton_clicked();
 
@@ -58,10 +30,9 @@ private slots:
 
     void on_txtExpression_returnPressed();
 
+    void on_leftButton_clicked();
 
-    void on_leftBracketButton_clicked();
-
-    void on_rightBracketButton_clicked();
+    void on_rightButton_clicked();
 
 private:
     Ui::MainWindow *ui;

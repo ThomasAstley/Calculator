@@ -39,115 +39,59 @@ namespace {
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {};
 static constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::stringData(
     "MainWindow",
-    "on_oneButton_clicked",
+    "onNumberOrSymbolButtonClicked",
     "",
-    "on_zeroButton_clicked",
-    "on_twoButton_clicked",
-    "on_threeButton_clicked",
-    "on_fourButton_clicked",
-    "on_fiveButton_clicked",
-    "on_sixButton_clicked",
-    "on_sevenButton_clicked",
-    "on_eightButton_clicked",
-    "on_nineButton_clicked",
-    "on_pointButton_clicked",
-    "on_additionButton_clicked",
-    "on_subtractionButton_clicked",
-    "on_multiplicationButton_clicked",
-    "on_divisionButton_clicked",
     "on_deleteButton_clicked",
     "on_equalsButton_clicked",
     "on_clearButton_clicked",
     "on_txtExpression_textChanged",
     "arg1",
     "on_txtExpression_returnPressed",
-    "on_leftBracketButton_clicked",
-    "on_rightBracketButton_clicked"
+    "on_leftButton_clicked",
+    "on_rightButton_clicked"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
-    uint offsetsAndSizes[50];
+    uint offsetsAndSizes[22];
     char stringdata0[11];
-    char stringdata1[21];
+    char stringdata1[30];
     char stringdata2[1];
-    char stringdata3[22];
-    char stringdata4[21];
+    char stringdata3[24];
+    char stringdata4[24];
     char stringdata5[23];
-    char stringdata6[22];
-    char stringdata7[22];
-    char stringdata8[21];
-    char stringdata9[23];
+    char stringdata6[29];
+    char stringdata7[5];
+    char stringdata8[31];
+    char stringdata9[22];
     char stringdata10[23];
-    char stringdata11[22];
-    char stringdata12[23];
-    char stringdata13[26];
-    char stringdata14[29];
-    char stringdata15[32];
-    char stringdata16[26];
-    char stringdata17[24];
-    char stringdata18[24];
-    char stringdata19[23];
-    char stringdata20[29];
-    char stringdata21[5];
-    char stringdata22[31];
-    char stringdata23[29];
-    char stringdata24[30];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSMainWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
 Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_stringdata_CLASSMainWindowENDCLASS = {
     {
         QT_MOC_LITERAL(0, 10),  // "MainWindow"
-        QT_MOC_LITERAL(11, 20),  // "on_oneButton_clicked"
-        QT_MOC_LITERAL(32, 0),  // ""
-        QT_MOC_LITERAL(33, 21),  // "on_zeroButton_clicked"
-        QT_MOC_LITERAL(55, 20),  // "on_twoButton_clicked"
-        QT_MOC_LITERAL(76, 22),  // "on_threeButton_clicked"
-        QT_MOC_LITERAL(99, 21),  // "on_fourButton_clicked"
-        QT_MOC_LITERAL(121, 21),  // "on_fiveButton_clicked"
-        QT_MOC_LITERAL(143, 20),  // "on_sixButton_clicked"
-        QT_MOC_LITERAL(164, 22),  // "on_sevenButton_clicked"
-        QT_MOC_LITERAL(187, 22),  // "on_eightButton_clicked"
-        QT_MOC_LITERAL(210, 21),  // "on_nineButton_clicked"
-        QT_MOC_LITERAL(232, 22),  // "on_pointButton_clicked"
-        QT_MOC_LITERAL(255, 25),  // "on_additionButton_clicked"
-        QT_MOC_LITERAL(281, 28),  // "on_subtractionButton_clicked"
-        QT_MOC_LITERAL(310, 31),  // "on_multiplicationButton_clicked"
-        QT_MOC_LITERAL(342, 25),  // "on_divisionButton_clicked"
-        QT_MOC_LITERAL(368, 23),  // "on_deleteButton_clicked"
-        QT_MOC_LITERAL(392, 23),  // "on_equalsButton_clicked"
-        QT_MOC_LITERAL(416, 22),  // "on_clearButton_clicked"
-        QT_MOC_LITERAL(439, 28),  // "on_txtExpression_textChanged"
-        QT_MOC_LITERAL(468, 4),  // "arg1"
-        QT_MOC_LITERAL(473, 30),  // "on_txtExpression_returnPressed"
-        QT_MOC_LITERAL(504, 28),  // "on_leftBracketButton_clicked"
-        QT_MOC_LITERAL(533, 29)   // "on_rightBracketButton_clicked"
+        QT_MOC_LITERAL(11, 29),  // "onNumberOrSymbolButtonClicked"
+        QT_MOC_LITERAL(41, 0),  // ""
+        QT_MOC_LITERAL(42, 23),  // "on_deleteButton_clicked"
+        QT_MOC_LITERAL(66, 23),  // "on_equalsButton_clicked"
+        QT_MOC_LITERAL(90, 22),  // "on_clearButton_clicked"
+        QT_MOC_LITERAL(113, 28),  // "on_txtExpression_textChanged"
+        QT_MOC_LITERAL(142, 4),  // "arg1"
+        QT_MOC_LITERAL(147, 30),  // "on_txtExpression_returnPressed"
+        QT_MOC_LITERAL(178, 21),  // "on_leftButton_clicked"
+        QT_MOC_LITERAL(200, 22)   // "on_rightButton_clicked"
     },
     "MainWindow",
-    "on_oneButton_clicked",
+    "onNumberOrSymbolButtonClicked",
     "",
-    "on_zeroButton_clicked",
-    "on_twoButton_clicked",
-    "on_threeButton_clicked",
-    "on_fourButton_clicked",
-    "on_fiveButton_clicked",
-    "on_sixButton_clicked",
-    "on_sevenButton_clicked",
-    "on_eightButton_clicked",
-    "on_nineButton_clicked",
-    "on_pointButton_clicked",
-    "on_additionButton_clicked",
-    "on_subtractionButton_clicked",
-    "on_multiplicationButton_clicked",
-    "on_divisionButton_clicked",
     "on_deleteButton_clicked",
     "on_equalsButton_clicked",
     "on_clearButton_clicked",
     "on_txtExpression_textChanged",
     "arg1",
     "on_txtExpression_returnPressed",
-    "on_leftBracketButton_clicked",
-    "on_rightBracketButton_clicked"
+    "on_leftButton_clicked",
+    "on_rightButton_clicked"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -159,7 +103,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -167,49 +111,21 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,  146,    2, 0x08,    1 /* Private */,
-       3,    0,  147,    2, 0x08,    2 /* Private */,
-       4,    0,  148,    2, 0x08,    3 /* Private */,
-       5,    0,  149,    2, 0x08,    4 /* Private */,
-       6,    0,  150,    2, 0x08,    5 /* Private */,
-       7,    0,  151,    2, 0x08,    6 /* Private */,
-       8,    0,  152,    2, 0x08,    7 /* Private */,
-       9,    0,  153,    2, 0x08,    8 /* Private */,
-      10,    0,  154,    2, 0x08,    9 /* Private */,
-      11,    0,  155,    2, 0x08,   10 /* Private */,
-      12,    0,  156,    2, 0x08,   11 /* Private */,
-      13,    0,  157,    2, 0x08,   12 /* Private */,
-      14,    0,  158,    2, 0x08,   13 /* Private */,
-      15,    0,  159,    2, 0x08,   14 /* Private */,
-      16,    0,  160,    2, 0x08,   15 /* Private */,
-      17,    0,  161,    2, 0x08,   16 /* Private */,
-      18,    0,  162,    2, 0x08,   17 /* Private */,
-      19,    0,  163,    2, 0x08,   18 /* Private */,
-      20,    1,  164,    2, 0x08,   19 /* Private */,
-      22,    0,  167,    2, 0x08,   21 /* Private */,
-      23,    0,  168,    2, 0x08,   22 /* Private */,
-      24,    0,  169,    2, 0x08,   23 /* Private */,
+       1,    0,   62,    2, 0x08,    1 /* Private */,
+       3,    0,   63,    2, 0x08,    2 /* Private */,
+       4,    0,   64,    2, 0x08,    3 /* Private */,
+       5,    0,   65,    2, 0x08,    4 /* Private */,
+       6,    1,   66,    2, 0x08,    5 /* Private */,
+       8,    0,   69,    2, 0x08,    7 /* Private */,
+       9,    0,   70,    2, 0x08,    8 /* Private */,
+      10,    0,   71,    2, 0x08,    9 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   21,
+    QMetaType::Void, QMetaType::QString,    7,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -226,35 +142,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSMainWindowENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
-        // method 'on_oneButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_zeroButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_twoButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_threeButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_fourButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_fiveButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_sixButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_sevenButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_eightButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_nineButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_pointButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_additionButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_subtractionButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_multiplicationButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_divisionButton_clicked'
+        // method 'onNumberOrSymbolButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_deleteButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -267,9 +155,9 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
         // method 'on_txtExpression_returnPressed'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_leftBracketButton_clicked'
+        // method 'on_leftButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_rightBracketButton_clicked'
+        // method 'on_rightButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -281,28 +169,14 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->on_oneButton_clicked(); break;
-        case 1: _t->on_zeroButton_clicked(); break;
-        case 2: _t->on_twoButton_clicked(); break;
-        case 3: _t->on_threeButton_clicked(); break;
-        case 4: _t->on_fourButton_clicked(); break;
-        case 5: _t->on_fiveButton_clicked(); break;
-        case 6: _t->on_sixButton_clicked(); break;
-        case 7: _t->on_sevenButton_clicked(); break;
-        case 8: _t->on_eightButton_clicked(); break;
-        case 9: _t->on_nineButton_clicked(); break;
-        case 10: _t->on_pointButton_clicked(); break;
-        case 11: _t->on_additionButton_clicked(); break;
-        case 12: _t->on_subtractionButton_clicked(); break;
-        case 13: _t->on_multiplicationButton_clicked(); break;
-        case 14: _t->on_divisionButton_clicked(); break;
-        case 15: _t->on_deleteButton_clicked(); break;
-        case 16: _t->on_equalsButton_clicked(); break;
-        case 17: _t->on_clearButton_clicked(); break;
-        case 18: _t->on_txtExpression_textChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 19: _t->on_txtExpression_returnPressed(); break;
-        case 20: _t->on_leftBracketButton_clicked(); break;
-        case 21: _t->on_rightBracketButton_clicked(); break;
+        case 0: _t->onNumberOrSymbolButtonClicked(); break;
+        case 1: _t->on_deleteButton_clicked(); break;
+        case 2: _t->on_equalsButton_clicked(); break;
+        case 3: _t->on_clearButton_clicked(); break;
+        case 4: _t->on_txtExpression_textChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 5: _t->on_txtExpression_returnPressed(); break;
+        case 6: _t->on_leftButton_clicked(); break;
+        case 7: _t->on_rightButton_clicked(); break;
         default: ;
         }
     }
@@ -327,13 +201,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 8)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 22;
+        _id -= 8;
     }
     return _id;
 }

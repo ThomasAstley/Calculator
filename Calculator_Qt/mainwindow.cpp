@@ -9,6 +9,17 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    const QList<QPushButton *> buttons = {
+        ui->zeroButton, ui->oneButton, ui->twoButton, ui->threeButton, ui->fourButton,
+        ui->fiveButton, ui->sixButton, ui->sevenButton, ui->eightButton, ui->nineButton,
+        ui->pointButton, ui->additionButton, ui->subtractionButton, ui->multiplicationButton,
+        ui->divisionButton, ui->leftBracketButton, ui->rightBracketButton
+    };
+    for (QPushButton *button : buttons) {
+        connect(button, &QPushButton::clicked, this, &MainWindow::onNumberOrSymbolButtonClicked);
+    }
+    ui->txtExpression->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -18,119 +29,32 @@ MainWindow::~MainWindow()
 
 QString display_expression;
 
-void MainWindow::on_zeroButton_clicked()
-{
-    display_expression.append("0");
+void MainWindow::onNumberOrSymbolButtonClicked() {
+    QPushButton *button = qobject_cast<QPushButton *>(sender());
+    if (!button)
+        return;
+    QString buttonText = button->text();
+    int cursorPosition = ui->txtExpression->cursorPosition();
+    display_expression.insert(cursorPosition, buttonText);
     ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_oneButton_clicked()
-{
-    display_expression.append("1");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_twoButton_clicked()
-{
-    display_expression.append("2");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_threeButton_clicked()
-{
-    display_expression.append("3");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_fourButton_clicked()
-{
-    display_expression.append("4");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_fiveButton_clicked()
-{
-    display_expression.append("5");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_sixButton_clicked()
-{
-    display_expression.append("6");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_sevenButton_clicked()
-{
-    display_expression.append("7");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_eightButton_clicked()
-{
-    display_expression.append("8");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_nineButton_clicked()
-{
-    display_expression.append("9");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_pointButton_clicked()
-{
-    display_expression.append(".");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_additionButton_clicked()
-{
-    display_expression.append("+");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_subtractionButton_clicked()
-{
-    display_expression.append("-");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_multiplicationButton_clicked()
-{
-    display_expression.append("*");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_divisionButton_clicked()
-{
-    display_expression.append("/");
-    ui->txtExpression->setText(display_expression);
-}
-
-void MainWindow::on_leftBracketButton_clicked()
-{
-    display_expression.append("(");
-    ui->txtExpression->setText(display_expression);
-}
-
-
-void MainWindow::on_rightBracketButton_clicked()
-{
-    display_expression.append(")");
-    ui->txtExpression->setText(display_expression);
+    ui->txtExpression->setCursorPosition(cursorPosition + 1);
+    ui->txtExpression->setFocus();
 }
 
 void MainWindow::on_deleteButton_clicked()
 {
-    display_expression.removeLast();
+    int cursorPosition = ui->txtExpression->cursorPosition();
+    display_expression.removeAt(cursorPosition-1);
     ui->txtExpression->setText(display_expression);
+    ui->txtExpression->setCursorPosition(cursorPosition-1);
+    ui->txtExpression->setFocus();
 }
 
 void MainWindow::on_clearButton_clicked()
 {
     display_expression.clear();
     ui->txtExpression->setText(display_expression);
+    ui->txtExpression->setFocus();
 }
 
 bool isOperator(char c) {
@@ -145,7 +69,7 @@ int priority(char c)  {
     return 0;
 }
 
-double calculate(double a, double b, char c) {
+long double calculate(long double a, long double b, char c) {
     if (c == '/')
         return a / b;
     else if (c == '*')
@@ -160,57 +84,94 @@ double calculate(double a, double b, char c) {
 QString shuntingYard(const QString& display_expression)
 {
     string expression_string = display_expression.toStdString();
-    stack<double> values;
+
+    if (expression_string.empty()){
+        return "";
+    }
+    if (isOperator(expression_string.back())) {
+        return "Error! Operator at end of expression";
+    }
+    stack<long double> values;
     stack<char> operators;
     size_t expression_length = expression_string.length();
     int unclosed_brackets = 0;
+    bool negative_brackets = false;
     for (size_t i = 0; i < expression_length; i++) {
         if (isspace(expression_string[i])) {
             continue;
         }
         if (((unclosed_brackets == 1 && expression_string[i] != ')' ) || (unclosed_brackets > 1)) && i == expression_length - 1) {
-            return "missmatched brackets error!";
+            return "Error! Missmatched brackets";
         }
         if (isdigit(expression_string[i]) || ((expression_string[i] == '-' || expression_string[i] == '+') && (i == 0 || !(isdigit(expression_string[i-1]) || expression_string[i-1] == ')')))) {
             string num;
-            if ((expression_string[i] == '-' || expression_string[i] == '+') && !isdigit(expression_string[i+1]))
-                return "too many operators in a row error!";
-            if (expression_string[i] == '-') {
+            if ((expression_string[i] == '-' || expression_string[i] == '+') && isOperator(expression_string[i+1]))
+                return "Error! Too many operators in a row";
+            if (expression_string[i+1] == '(') {
+                if (isdigit(expression_string[i])) {
+                    operators.push('*');
+                }
+                else if (expression_string[i] == '-'){
+                    negative_brackets = true;
+                    i++;
+                }
+                else if (expression_string[i] == '+'){
+                    i++;
+                }
+            }
+            else if (expression_string[i] == '-') {
                 num += '-';
                 i++;
             }
-            if (expression_string[i] == '+') {
+            else if (expression_string[i] == '+') {
                 i++;
             }
+
             while (i < expression_length && (isdigit(expression_string[i]) || expression_string[i] == '.')) {
                 num += expression_string[i];
                 i++;
             }
             --i;
-            values.push(stod(num));
+            if (!num.empty()) {
+                values.push(stod(num));
+            }
         }
         else if (expression_string[i] == '(') {
+            if (expression_string[i-1] == ')') {
+                operators.push('*');
+            }
             operators.push(expression_string[i]);
             ++unclosed_brackets;
         }
         else if (expression_string[i] == ')' && unclosed_brackets>0) {
-            while (!operators.empty() && operators.top() != '(') {
-                double b = values.top();
+            if (operators.top() == '(' && negative_brackets) {
+                long double a = -values.top();
                 values.pop();
-                double a = values.top();
+                values.push(a);
+            }
+            while (!operators.empty() && operators.top() != '(') {
+                long double b = values.top();
+                values.pop();
+                long double a = values.top();
                 values.pop();
                 char c = operators.top();
                 operators.pop();
+                if (negative_brackets) {
+                    values.push(-calculate(a, b, c));
+                }
+                else {
                 values.push(calculate(a, b, c));
+                }
             }
             operators.pop();
             --unclosed_brackets;
+            negative_brackets = false;
         }
         else if (isOperator(expression_string[i]) && !((expression_string[i] == '*' || expression_string[i] == '/') && isOperator(expression_string[i-1])) && i != 0 && i != expression_length - 1) {
             while (!operators.empty() && priority(operators.top()) >= priority(expression_string[i])) {
-                double b = values.top();
+                long double b = values.top();
                 values.pop();
-                double a = values.top();
+                long double a = values.top();
                 values.pop();
                 char c = operators.top();
                 operators.pop();
@@ -221,243 +182,24 @@ QString shuntingYard(const QString& display_expression)
         else return "error!";
     }
     while (!operators.empty()) {
-        double b = values.top();
+        long double b = values.top();
         values.pop();
-        double a = values.top();
+        long double a = values.top();
         values.pop();
         char c = operators.top();
         operators.pop();
         values.push(calculate(a, b, c));
     }
     if (unclosed_brackets > 0)
-        return "missmatched brackets error!";
-    return QString::number(values.top());
-}
-
-
-
-QString oldMethod(QString display_expression)
-{
-    if (display_expression.isEmpty()){
-        return "";
-    }
-    string expression_string = display_expression.toStdString();
-    QString expression_QString;
-    char c;
-    bool all_mult_and_div_complete = false;
-    bool all_add_and_sub_complete = false;
-
-    while (!all_mult_and_div_complete){
-        int expression_length = expression_string.length();
-        int previous_operator_position = -1;
-        int div_or_mult_position = -1;
-        int next_operator_position = expression_length;
-        bool div_found = false;
-        bool mult_found = false;
-
-        for(int i=0; i < expression_length; i++) {
-            c = expression_string.at(i);
-            if ((c == '-' || c == '+') && !div_found && !mult_found) {
-                if ((i == previous_operator_position + 1) && c =='-') {
-                    expression_string[i] = 'm';
-                }
-                else if ((i == previous_operator_position + 1) && c =='+') {
-                    expression_string[i] = ' ';
-                }
-                else if (i == expression_length-1) {
-                    expression_QString = QString("Invalid Operator Position: %1").arg(c);
-                    return expression_QString;
-                }
-                else {
-                    previous_operator_position = i;
-                }
-            }
-            else if (c == '/' && !div_found && !mult_found){
-                if (i == 0 || i == expression_length-1) {
-                    expression_QString = QString("Invalid Operator Position: %1").arg(c);
-                    return expression_QString;
-                }
-                div_found = true;
-                div_or_mult_position = i;
-            }
-            else if (c == '*' && !div_found && !mult_found){
-                if (i == 0 || i == expression_length-1) {
-                    expression_QString = QString("Invalid Operator Position: %1").arg(c);
-                    return expression_QString;
-                }
-                mult_found = true;
-                div_or_mult_position = i;
-            }
-            else if ((c == '/' || c == '*' || c == '-' || c == '+' ) && (div_found || mult_found)){
-                if ((i == div_or_mult_position + 1) && c =='-') {
-                    expression_string[i] = 'm';
-                }
-                else if ((i == div_or_mult_position + 1) && c =='+') {
-                    expression_string[i] = ' ';
-                }
-                else if (i == expression_length-1) {
-                    expression_QString = QString("Invalid Operator Position: %1").arg(c);
-                    return expression_QString;
-                }
-                else {
-                    next_operator_position = i;
-                    break;
-                }
-            }
-            else if ((i == expression_length - 1) && !div_found && !mult_found){
-                all_mult_and_div_complete = true;
-            }
-        }
-        if (div_found && !all_mult_and_div_complete){
-            string first_number_string;
-            string second_number_string;
-            if (div_or_mult_position - previous_operator_position == 1 || next_operator_position - div_or_mult_position == 1) {
-                expression_string = "Error: Two or more consecutive operators!";
-                return QString::fromStdString(expression_string);
-            }
-            for(int i = previous_operator_position + 1; i < div_or_mult_position; i++){
-                if (expression_string.at(i) == 'm')
-                    first_number_string += '-';
-                else
-                    first_number_string += expression_string.at(i);
-            }
-            for(int i = div_or_mult_position + 1; i < next_operator_position; i++){
-                if (expression_string.at(i) == 'm')
-                    second_number_string += '-';
-                else
-                    second_number_string += expression_string.at(i);
-            }
-            string result = to_string(stod(first_number_string) / stod(second_number_string));
-            result.erase ( result.find_last_not_of('0') + 1, string::npos );
-            result.erase ( result.find_last_not_of('.') + 1, string::npos );
-            if (result.at(0) == '-')
-                result.at(0) = 'm';
-            expression_string.erase(previous_operator_position + 1, next_operator_position-previous_operator_position - 1);
-            expression_string.insert(previous_operator_position + 1, result);
-        }
-        else if (mult_found && !all_mult_and_div_complete){
-            string first_number_string;
-            string second_number_string;
-            if (div_or_mult_position - previous_operator_position == 1 || next_operator_position - div_or_mult_position == 1) {
-                expression_string = "Error: Two or more consecutive operators!";
-                return QString::fromStdString(expression_string);
-            }
-            for(int i = previous_operator_position + 1; i < div_or_mult_position; i++){
-                if (expression_string.at(i) == 'm')
-                    first_number_string += '-';
-                else
-                    first_number_string += expression_string.at(i);
-            }
-            for(int i = div_or_mult_position + 1; i < next_operator_position; i++){
-                if (expression_string.at(i) == 'm')
-                    second_number_string += '-';
-                else
-                    second_number_string += expression_string.at(i);
-            }
-            string result = to_string(stod(first_number_string) * stod(second_number_string));
-            result.erase ( result.find_last_not_of('0') + 1, string::npos );
-            result.erase ( result.find_last_not_of('.') + 1, string::npos );
-            if (result.at(0) == '-')
-                result.at(0) = 'm';
-            expression_string.erase(previous_operator_position + 1, next_operator_position-previous_operator_position - 1);
-            expression_string.insert(previous_operator_position + 1, result);
-        }
-    }
-
-    while (!all_add_and_sub_complete){
-        int expression_length = expression_string.length();
-        int previous_operator_position = -1;
-        int add_or_sub_position;
-        int next_operator_position = expression_length;
-        bool add_found = false;
-        bool sub_found = false;
-
-        for(int i=0; i < expression_length; i++) {
-            c = expression_string.at(i);
-            if ((c == '+') && !add_found && !sub_found){
-                add_found = true;
-                add_or_sub_position = i;
-            }
-            else if ((c == '-') && !sub_found && !add_found){
-                sub_found = true;
-                add_or_sub_position = i;
-            }
-            else if ((c == '-' || c == '+' ) && (add_found || sub_found)){
-                next_operator_position = i;
-                break;
-            }
-            else if ((i == expression_length - 1) && !add_found && !sub_found){
-                all_add_and_sub_complete = true;
-            }
-        }
-
-        if (add_found && !all_add_and_sub_complete){
-            string first_number_string;
-            string second_number_string;
-            if (add_or_sub_position - previous_operator_position == 1 || next_operator_position - add_or_sub_position == 1) {
-                expression_string = "Error: Two or more consecutive operators!";
-                return QString::fromStdString(expression_string);
-            }
-            for(int i = previous_operator_position + 1; i < add_or_sub_position; i++){
-                if (expression_string.at(i) == 'm')
-                    first_number_string += '-';
-                else
-                    first_number_string += expression_string.at(i);
-            }
-            for(int i = add_or_sub_position + 1; i < next_operator_position; i++){
-                if (expression_string.at(i) == 'm')
-                    second_number_string += '-';
-                else
-                    second_number_string += expression_string.at(i);
-            }
-
-            string result = to_string(stod(first_number_string) + stod(second_number_string));
-            result.erase ( result.find_last_not_of('0') + 1, string::npos );
-            result.erase ( result.find_last_not_of('.') + 1, string::npos );
-            if (result.at(0) == '-')
-                result.at(0) = 'm';
-            expression_string.erase(previous_operator_position + 1, next_operator_position-previous_operator_position - 1);
-            expression_string.insert(previous_operator_position + 1, result);
-        }
-
-        else if (sub_found && !all_add_and_sub_complete){
-            string first_number_string;
-            string second_number_string;
-            if (add_or_sub_position - previous_operator_position == 1 || next_operator_position - add_or_sub_position == 1) {
-                expression_string = "Error: Two or more consecutive operators!";
-                return QString::fromStdString(expression_string);
-            }
-            for(int i = previous_operator_position + 1; i < add_or_sub_position; i++){
-                if (expression_string.at(i) == 'm')
-                    first_number_string += '-';
-                else
-                    first_number_string += expression_string.at(i);
-            }
-            for(int i = add_or_sub_position + 1; i < next_operator_position; i++){
-                if (expression_string.at(i) == 'm')
-                    second_number_string += '-';
-                else
-                    second_number_string += expression_string.at(i);
-            }
-            string result = to_string(stod(first_number_string) - stod(second_number_string));
-            result.erase ( result.find_last_not_of('0') + 1, string::npos );
-            result.erase ( result.find_last_not_of('.') + 1, string::npos );
-            if (result.at(0) == '-')
-                result.at(0) = 'm';
-            expression_string.erase(previous_operator_position + 1, next_operator_position-previous_operator_position - 1);
-            expression_string.insert(previous_operator_position + 1, result);
-        }
-    }
-    if (expression_string.at(0) == 'm')
-        expression_string.at(0) = '-';
-    return QString::fromStdString(expression_string);
+        return "Error! Missmatched brackets";
+    return QString::number(values.top(), 'g', 15);
 }
 
 
 void MainWindow::on_equalsButton_clicked()
 {
     ui->txtAns->setText(shuntingYard(display_expression));
-    //ui->txtAns->setText(oldMethod(display_expression));
+    ui->txtExpression->setFocus();
 }
 
 
@@ -469,6 +211,21 @@ void MainWindow::on_txtExpression_textChanged(const QString &text)
 
 void MainWindow::on_txtExpression_returnPressed()
 {
-    MainWindow::on_equalsButton_clicked();
+    on_equalsButton_clicked();
+}
+
+void MainWindow::on_leftButton_clicked()
+{
+    int cursorPosition = ui->txtExpression->cursorPosition();
+    ui->txtExpression->setCursorPosition(cursorPosition-1);
+    ui->txtExpression->setFocus();
+}
+
+
+void MainWindow::on_rightButton_clicked()
+{
+    int cursorPosition = ui->txtExpression->cursorPosition();
+    ui->txtExpression->setCursorPosition(cursorPosition+1);
+    ui->txtExpression->setFocus();
 }
 
