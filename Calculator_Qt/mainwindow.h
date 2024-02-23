@@ -34,6 +34,7 @@ private slots:
 
     void on_rightButton_clicked();
 
+
 private:
     Ui::MainWindow *ui;
 };

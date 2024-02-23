@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->zeroButton, ui->oneButton, ui->twoButton, ui->threeButton, ui->fourButton,
         ui->fiveButton, ui->sixButton, ui->sevenButton, ui->eightButton, ui->nineButton,
         ui->pointButton, ui->additionButton, ui->subtractionButton, ui->multiplicationButton,
-        ui->divisionButton, ui->leftBracketButton, ui->rightBracketButton
+        ui->divisionButton, ui->leftBracketButton, ui->rightBracketButton, ui->ansButton, ui->scientificNotationButton
     };
     for (QPushButton *button : buttons) {
         connect(button, &QPushButton::clicked, this, &MainWindow::onNumberOrSymbolButtonClicked);
@@ -29,6 +29,8 @@ MainWindow::~MainWindow()
 
 QString display_expression;
 
+QString previous_answer;
+
 void MainWindow::onNumberOrSymbolButtonClicked() {
     QPushButton *button = qobject_cast<QPushButton *>(sender());
     if (!button)
@@ -37,7 +39,7 @@ void MainWindow::onNumberOrSymbolButtonClicked() {
     int cursorPosition = ui->txtExpression->cursorPosition();
     display_expression.insert(cursorPosition, buttonText);
     ui->txtExpression->setText(display_expression);
-    ui->txtExpression->setCursorPosition(cursorPosition + 1);
+    ui->txtExpression->setCursorPosition(cursorPosition + buttonText.length());
     ui->txtExpression->setFocus();
 }
 
@@ -81,7 +83,7 @@ long double calculate(long double a, long double b, char c) {
     else return 0; // error needed here
 }
 
-QString shuntingYard(const QString& display_expression)
+QString shuntingYard(const QString& display_expression, const QString& previous_answer)
 {
     string expression_string = display_expression.toStdString();
 
@@ -127,8 +129,15 @@ QString shuntingYard(const QString& display_expression)
                 i++;
             }
 
-            while (i < expression_length && (isdigit(expression_string[i]) || expression_string[i] == '.')) {
-                num += expression_string[i];
+            while (i < expression_length && (isdigit(expression_string[i]) || expression_string[i] == '.' || expression_string[i] == 'E' )) {
+                if (expression_string[i] == 'E' && (expression_string[i+1] == '+' || expression_string[i+1] == '-')) {
+                    num += expression_string[i];
+                    num += expression_string[i+1];
+                    i++;
+                }
+                else {
+                    num += expression_string[i];
+                }
                 i++;
             }
             --i;
@@ -179,6 +188,30 @@ QString shuntingYard(const QString& display_expression)
             }
             operators.push(expression_string[i]);
         }
+        else if (expression_string[i] == 'A') {
+            int previous_i = i;
+            if (expression_string[i+1] == 'n' && expression_string[i+2] == 's') {
+                string previous_answer_string = previous_answer.toStdString();
+                if (!(isOperator(expression_string[i+3]) || expression_string[i+3] == ')') && i != expression_length - 3) {
+                    expression_string.insert(i+3,"*");
+                }
+                if (!(isOperator(expression_string[i-1]) || expression_string[i-1] == '(') && i != 0 ) {
+                    expression_string.insert(i,"*");
+                    ++i;
+                }
+                if (!previous_answer_string.empty()) {
+                    expression_string.replace(i, 3, previous_answer_string);
+                }
+                else {
+                    expression_string.replace(i, 3, "0");
+                }
+            }
+            else {
+                return "Error, \"A\" not followed by \"ns\"";
+            }
+            expression_length = expression_string.length();
+            i = previous_i - 1;
+        }
         else return "error!";
     }
     while (!operators.empty()) {
@@ -192,13 +225,14 @@ QString shuntingYard(const QString& display_expression)
     }
     if (unclosed_brackets > 0)
         return "Error! Missmatched brackets";
-    return QString::number(values.top(), 'g', 15);
+    return QString::number(values.top(), 'G', 15);
 }
 
 
 void MainWindow::on_equalsButton_clicked()
 {
-    ui->txtAns->setText(shuntingYard(display_expression));
+    previous_answer = ui->txtAns->text();
+    ui->txtAns->setText(shuntingYard(display_expression, previous_answer));
     ui->txtExpression->setFocus();
 }
 
@@ -228,4 +262,3 @@ void MainWindow::on_rightButton_clicked()
     ui->txtExpression->setCursorPosition(cursorPosition+1);
     ui->txtExpression->setFocus();
 }
-
