@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+QString shuntingYard(const QString& display_expression, const QString& previous_answer);
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -39,3 +41,5 @@ private:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
+
+

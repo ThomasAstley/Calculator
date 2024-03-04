@@ -146,7 +146,7 @@ QString shuntingYard(const QString& display_expression, const QString& previous_
             }
         }
         else if (expression_string[i] == '(') {
-            if (expression_string[i-1] == ')') {
+            if (i>0 && expression_string[i-1] == ')') {
                 operators.push('*');
             }
             operators.push(expression_string[i]);
@@ -189,7 +189,7 @@ QString shuntingYard(const QString& display_expression, const QString& previous_
             operators.push(expression_string[i]);
         }
         else if (expression_string[i] == 'A') {
-            int previous_i = i;
+            int previous_i = static_cast<int>(i);
             if (expression_string[i+1] == 'n' && expression_string[i+2] == 's') {
                 string previous_answer_string = previous_answer.toStdString();
                 if (!(isOperator(expression_string[i+3]) || expression_string[i+3] == ')') && i != expression_length - 3) {
